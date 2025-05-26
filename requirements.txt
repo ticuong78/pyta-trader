@@ -1,2 +1,10 @@
+annotated-types==0.7.0
 MetaTrader5==5.0.4993
 numpy==2.2.6
+pydantic==2.11.5
+pydantic-settings==2.9.1
+pydantic_core==2.33.2
+python-dotenv==1.1.0
+structlinks==1.1.4
+typing-inspection==0.4.1
+typing_extensions==4.13.2
