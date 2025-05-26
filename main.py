@@ -1,5 +1,9 @@
 # pyright: reportIndexIssue=false, reportArgumentType=false, reportAttributeAccessIssue=false
 
+"""
+This is an example of how to establish connection to Meta Trader 5
+"""
+
 import logging
 import MetaTrader5 as mt5
 

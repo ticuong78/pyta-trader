@@ -1,7 +1,14 @@
+# pyright: reportArgumentType=false
+
+"""
+This is an exmaple of how to integrate this tool to your matplotlib projects
+"""
+
 import sys
 import os
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import MetaTrader5 as mt5
 from datetime import datetime
 
 # Make sure src/ is importable
@@ -9,10 +16,9 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..',
 
 from src import Chart
 
-# 🎯 Config
-SYMBOL = "EURUSD"
-TIMEFRAME = 1  # mt5.TIMEFRAME_M1
-NUM_CANDLES = 50
+SYMBOL = "BTCUSD_m"
+TIMEFRAME = 12  # mt5.TIMEFRAME_M12
+NUM_CANDLES = 25
 
 chart = Chart(symbol=SYMBOL, time_frame=TIMEFRAME)
 
