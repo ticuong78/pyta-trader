@@ -43,7 +43,7 @@ class Chart:
 
         # Reverse to make most recent first
         self.prices = rates[::-1]
-        self.last_tick_time = mt5.symbol_info_tick(self.symbol).time if mt5.symbol_info_tick(self.symbol) else 0
+        self.last_tick_time = mt5.symbol_info_tick(self.symbol).time
 
         return True
 
