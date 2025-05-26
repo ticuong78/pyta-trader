@@ -3,6 +3,10 @@
 import os
 
 def get_config():
+    """
+    Give you a comprehensive config (or .env file) loader to load enougn data needed for setting up Meta Trader connection
+    Feel free to use your own
+    """
     env = os.getenv("APP_ENV", "dev").lower()
     
     if env == "prod":
