@@ -15,9 +15,7 @@ from mplfinance.original_flavor import candlestick_ohlc
 import matplotlib.dates as mdates
 
 # Ensure src is importable
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
-
-from src.chart import Chart  # adjust if your Chart is in src/chart/chart.py
+from src import Chart
 
 # ───── Configuration ─────
 SYMBOL = "BTCUSD_m"
@@ -62,5 +60,5 @@ def animate(frame):
     plt.setp(ax.get_xticklabels(), rotation=45)
     plt.tight_layout()
 
-ani = animation.FuncAnimation(fig, animate, interval=1000, cache_frame_data=False)
+ani = animation.FuncAnimation(fig, animate, interval=1, cache_frame_data=False)
 plt.show()
