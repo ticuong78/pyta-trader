@@ -1,7 +1,7 @@
 # pyright: reportArgumentType=false
 
 """
-This is an exmaple of how to integrate this tool to your matplotlib projects
+A demo using matplotlib
 """
 
 import sys
@@ -18,7 +18,7 @@ from src import Chart
 
 SYMBOL = "BTCUSD_m"
 TIMEFRAME = 12  # mt5.TIMEFRAME_M12
-NUM_CANDLES = 25
+NUM_CANDLES = 50
 
 chart = Chart(symbol=SYMBOL, time_frame=TIMEFRAME)
 
@@ -47,5 +47,5 @@ def animate(frame):
     plt.xticks(rotation=45)
     plt.tight_layout()
 
-ani = animation.FuncAnimation(fig, animate, interval=1000)
+ani = animation.FuncAnimation(fig, animate, interval=10)
 plt.show()
