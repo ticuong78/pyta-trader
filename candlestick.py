@@ -37,7 +37,6 @@ def animate(frame):
     if not prices:
         return
 
-    # Convert to DataFrame
     df = pd.DataFrame(prices)
     df["time"] = pd.to_datetime(df["time"], unit="s")
     df["mpl_time"] = df["time"].map(mdates.date2num)
@@ -45,12 +44,21 @@ def animate(frame):
     ohlc = df[["mpl_time", "open", "high", "low", "close"]]
 
     ax.clear()
-    candlestick_ohlc(ax, ohlc.values, width=0.02, colorup='g', colordown='r')
-    ax.xaxis_date()
+
+    if len(df) >= 2:
+        spacing = abs(df["mpl_time"].iloc[0] - df["mpl_time"].iloc[1])
+        width = spacing * 0.8
+    else:
+        width = 0.0005
+
+    candlestick_ohlc(ax, ohlc.values, width=width, colorup='g', colordown='r')
+
     ax.set_title(f"{SYMBOL} - Live Candlestick Chart")
     ax.set_ylabel("Price")
     ax.set_xlabel("Time")
     ax.grid(True)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
+    ax.set_xlim(ohlc["mpl_time"].min(), ohlc["mpl_time"].max())
     plt.setp(ax.get_xticklabels(), rotation=45)
     plt.tight_layout()
 
