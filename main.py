@@ -28,7 +28,7 @@ try:
 
     for symbol in symbols.keys():
         chart = Chart(symbol, mt5.TIMEFRAME_M12)
-        chart.renew_chart()
+        assert chart.init_chart()
         symbols[symbol] = chart.get_chart()
         print(symbols[symbol])
 
