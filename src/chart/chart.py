@@ -1,17 +1,6 @@
 # pyright: reportIndexIssue=false, reportAttributeAccessIssue=false
 
-# price object:
-#           time: seconds from 1970
-#           open: open price
-#           high: highest price
-#           low: lowest price
-#           close: close price
-#           tick_volume: no care
-#           spread: no care
-#           real_volume: no care
-
 import logging
-
 import numpy as np
 import MetaTrader5 as mt5
 
@@ -21,47 +10,52 @@ class Chart:
     def __init__(self, symbol: str, time_frame) -> None:
         """
         :param symbol: Symbol to get
-        :param time_frame: time frame to get
+        :param time_frame: Time frame to get
         """
-        self.prices = []
+        self.prices = np.array([], dtype=object)
         self.last_time = 0
         self.symbol = symbol
         self.time_frame = time_frame
 
     def get_chart(self):
         """
-        Give prices of symbol and timeframe if they are found
+        Call this function initially to get first 100 candles from the zero point
 
         :return array: arrays of mt5's price objects
         """
         if not mt5.initialize():
             logger.exception("Please first establish connection to Meta Trader")
-            return
+            return None
 
         rates = mt5.copy_rates_from_pos(
             self.symbol, self.time_frame,
             0, 100
         )
 
-        self.prices = rates
-
-        if len(rates) == 0:
-            print("Something has gone wrong...")
+        if rates is None or len(rates) == 0:
+            logger.warning("Something has gone wrong...")
             return None
 
+        self.prices = rates
         self.last_time = rates[-1][0]
-
-        return rates
+        return self.prices
     
     def renew_chart(self):
         """
-        Renew chart only when a new tick comes in
+        To renew chart and update prices. Call this function after you get 
+        your required number of candles (use **get_chart**)
+
+        :return: Updated price array if updated, else original price array
         """
-        if not mt5.initialize():
+        if not mt5.initialize():    
             logger.exception("Please first establish connection to Meta Trader")
-            return
+            return self.prices
 
         last_tick = mt5.symbol_info_tick(self.symbol)
+
+        if last_tick is None:
+            logger.warning("Failed to retrieve last tick")
+            return self.prices
 
         if last_tick.time != self.last_time:
             rates = mt5.copy_rates_from_pos(
@@ -71,6 +65,7 @@ class Chart:
             if rates is not None and len(rates) > 0:
                 self.last_time = rates[-1][0]
                 self.shift_down_and_append(rates[0])
+        return self.prices
 
     def shift_down_and_append(self, new_price):
         """
@@ -85,8 +80,4 @@ class Chart:
             self.prices[1:] = self.prices[:-1]  
             self.prices[0] = new_price
 
-
-
-__all__ = (
-    "Chart",
-)
+__all__ = ("Chart",)
