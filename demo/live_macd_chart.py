@@ -18,8 +18,8 @@ import matplotlib.dates as mdates
 sys.path.append(os.path.abspath("src"))
 
 # ───── Custom modules ─────
-from src.chart import Chart
-from src.indicator.macd import MACDIndicator
+from src.pyta_trader.chart import Chart
+from src.pyta_trader.indicator.macd import MACDIndicator
 
 # ───── Configuration ─────
 SYMBOL = "BTCUSD_m"

@@ -1,6 +1,8 @@
+# pyright: reportArgumentType=false
+
 from typing import List
-from src.chart import Chart
-from src.indicator.macd import MACDIndicator
+from ..chart import Chart
+from ..indicator.macd import MACDIndicator
 
 def classify_histogram_numeric(value: float, threshold: float = 0.01) -> int:
     """
@@ -72,7 +74,7 @@ def detect_macd_signal_from_chart(chart: Chart) -> int:
 
 if __name__ == "__main__":
     import MetaTrader5 as mt5
-    from src.chart import Chart
+    from ..chart import Chart
 
     SYMBOL = "BTCUSD_m"
     TIMEFRAME = mt5.TIMEFRAME_M15

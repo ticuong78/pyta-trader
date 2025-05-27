@@ -7,10 +7,10 @@ This is an example of how to establish connection to Meta Trader 5
 import logging
 import MetaTrader5 as mt5
 
-from src.config import get_config 
-from src.infras import init_mt5, shut_mt5
-from src.indicator.macd import MACDIndicator
-from src.chart import Chart
+from src.pyta_trader.config import get_config 
+from src.pyta_trader.infras import init_mt5, shut_mt5
+from src.pyta_trader.indicator.macd import MACDIndicator
+from src.pyta_trader.chart import Chart
 
 logger = logging.getLogger(__name__)
 

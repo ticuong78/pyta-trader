@@ -4,7 +4,7 @@ import logging
 import MetaTrader5 as mt5
 from typing import List, Dict
 
-from src.indicator.base import Indicator  # Base class
+from ..indicator.base import Indicator  # Base class
 # from src.indicator.macd import MACDIndicator  # Optional
 
 logger = logging.getLogger(__name__)
