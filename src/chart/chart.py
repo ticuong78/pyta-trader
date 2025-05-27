@@ -2,14 +2,10 @@
 
 import logging
 import MetaTrader5 as mt5
-<<<<<<< HEAD
-=======
-# from src.indicator.macd import calculate
->>>>>>> master
+from typing import List, Dict
 
-from typing import List
-
-from src.indicator.base import Indicator
+from src.indicator.base import Indicator  # Base class
+# from src.indicator.macd import MACDIndicator  # Optional
 
 logger = logging.getLogger(__name__)
 
@@ -21,25 +17,17 @@ class Chart:
         :param symbol: Trading symbol (e.g. 'EURUSD')
         :param time_frame: Time frame constant from MetaTrader5 (e.g. mt5.TIMEFRAME_M1)
         """
-        self.prices: List[float] = []
-        self.indicators: List[Indicator] = []
-        self.last_tick_time = 0
         self.symbol = symbol
         self.time_frame = time_frame
+        self.prices: List[Dict] = []  # Most recent first
+        self.last_tick_time = 0
+        self.indicators: List[Indicator] = []
 
-    def get_chart(self):
-        """
-        Get current cached candles, most recent first.
-
-        :return list: List of candle dictionaries
-        """
-        return self.prices
-
-    def init_chart(self):
+    def init_chart(self) -> bool:
         """
         Fetches the initial 100 candles and sets up the chart.
 
-        :return bool: Indicates whether initialization succeeded
+        :return bool: True if initialization succeeded
         """
         if not mt5.initialize():
             logger.exception("Please first establish connection to MetaTrader 5")
@@ -51,17 +39,22 @@ class Chart:
             return False
 
         self.prices = [dict(zip(r.dtype.names, r)) for r in reversed(rates)]
+
         tick = mt5.symbol_info_tick(self.symbol)
         if tick:
             self.last_tick_time = tick.time
 
+        # 🧠 Notify indicators on initialization
+        for indicator in self.indicators:
+            indicator.update(self.prices)
+
         return True
 
-    def check_and_update_chart(self):
+    def check_and_update_chart(self) -> bool:
         """
-        Checks for new ticks and updates the latest candle data accordingly.
+        Checks for new ticks and updates the chart. Notifies all attached indicators.
 
-        :return bool: True if an update occurred, otherwise False
+        :return bool: True if updated, False otherwise
         """
         tick = mt5.symbol_info_tick(self.symbol)
         if tick is None:
@@ -72,45 +65,63 @@ class Chart:
             self.last_tick_time = tick.time
 
             latest_candle = mt5.copy_rates_from_pos(self.symbol, self.time_frame, 0, 1)
-            if latest_candle and len(latest_candle) > 0:
-                latest = dict(zip(latest_candle[0].dtype.names, latest_candle[0]))
+            if latest_candle is None or len(latest_candle) == 0:
+                logger.warning("Failed to fetch latest candle")
+                return False
 
-                if not self.prices:
-                    self.prices = [latest]
-                    return True
+            new_price = dict(zip(latest_candle[0].dtype.names, latest_candle[0]))
 
-                if latest["time"] != self.prices[0]["time"]:
-                    self.shift_down_and_append(latest)
-                else:
-                    self.prices[0] = latest
+            if not self.prices:
+                self.prices = [new_price]
+            elif new_price["time"] != self.prices[0]["time"]:
+                self.shift_down_and_append(new_price)
+            else:
+                self.prices[0] = new_price  # Update current candle
+
+            for indicator in self.indicators:
+                indicator.update(self.prices)
 
             return True
 
         return False
 
-    def shift_down_and_append(self, new_price):
+    def shift_down_and_append(self, new_price: Dict):
         """
-        Shifts the existing prices down and adds new_price at the top.
+        Shifts existing prices down by one, adds new_price at the top.
 
-        :param new_price: A dictionary representing the latest candle
+        :param new_price: New candle data as a dictionary
         """
-        if not self.prices:
-            self.prices = [new_price]
-        else:
-            self.prices = [new_price] + self.prices[:-1]
-    
+        self.prices = [new_price] + self.prices[:-1]  # Keep fixed window
+
     def attach_indicator(self, indicator: Indicator):
-        if indicator in self.indicators or Indicator is None:
-            logger.warning("Indicator already attached or None. Please check!")
-            return
+        """
+        Adds an indicator and updates it immediately.
 
+        :param indicator: Any object subclassing Indicator
+        """
+        if indicator in self.indicators:
+            logger.warning("Indicator already attached.")
+            return
         self.indicators.append(indicator)
-        
-    def detach_indicator(self, indicator: Indicator):
-        if indicator not in self.indicators:
-            logger.warning("Indicator not attached. Please check!")
-            return
+        indicator.update(self.prices)  # Initialize with current data
 
+    def detach_indicator(self, indicator: Indicator):
+        """
+        Removes an indicator from the chart.
+
+        :param indicator: An instance of an attached indicator
+        """
+        if indicator not in self.indicators:
+            logger.warning("Indicator not found.")
+            return
         self.indicators.remove(indicator)
-    
+
+    def get_chart(self) -> List[Dict]:
+        """
+        Returns current price list (latest first).
+
+        :return: List of candle dictionaries
+        """
+        return self.prices
+
 __all__ = ("Chart",)

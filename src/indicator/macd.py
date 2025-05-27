@@ -1,36 +1,41 @@
-from typing import Tuple, List
-
+from typing import List
 from .base import Indicator
-from ..calculations import calculate_ema
+from ..calculations import calculate_ema  # Your own EMA implementation
 
 class MACDIndicator(Indicator): 
-    def __init__ (self, prices):
-        super().__init__(prices)
+    def __init__(self, prices=None):
+        super().__init__(prices or [])
         self.macd = []
         self.signal = []
         self.histogram = []
 
-    def calculate(self, prices, fast=5, slow=10, signal=9) -> Tuple[List[float], List[float], List[float]]:
-        """
-        Calculate MACD based on passed arguments
+    def calculate(self, fast=5, slow=10, signal=9) -> List[float]:
+        if not self.prices or len(self.prices) < slow + signal:
+            return []
 
-        Args:
-            prices (_type_): prices array
-            fast (int, optional): fast period. Defaults to 5.
-            slow (int, optional): slow period. Defaults to 10.
-            signal (int, optional): signalling period. Defaults to 9.
+        # Use Heikin Ashi-style close: (open + high + low + close) / 4
+        haclose = [(p["open"] + p["high"] + p["low"] + p["close"]) / 4 for p in self.prices]
 
-        Returns:
-            Tuple[List[float], List[float], List[float]]: macd, signal, histogram
-        """
-        fast_ema = self.calculate_ema(prices, fast)
-        slow_ema = self.calculate_ema(prices, slow)
-        macd = [f - s for f, s in zip(fast_ema, slow_ema)]
-        signal_line = self.calculate_ema(macd, signal)
-        histogram = [m - s for m, s in zip(macd, signal_line)]
-        
-        return macd, signal_line, histogram
-    
-__all__ = (
-    "MACDIndicator",
-)
+        fast_ema = calculate_ema(haclose, fast)
+        slow_ema = calculate_ema(haclose, slow)
+        self.macd = [f - s for f, s in zip(fast_ema, slow_ema)]
+
+        self.signal = calculate_ema(self.macd, signal)
+        self.histogram = [m - s for m, s in zip(self.macd, self.signal)]
+
+        return self.histogram
+
+    def update(self, prices: List[dict]):
+        self.prices = prices
+        self.calculate()
+
+    def latest(self):
+        if not self.histogram:
+            return None
+        return {
+            "macd": self.macd[-1],
+            "signal": self.signal[-1],
+            "histogram": self.histogram[-1],
+        }
+
+__all__ = ("MACDIndicator",)
