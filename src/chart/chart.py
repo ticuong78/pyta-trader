@@ -2,6 +2,8 @@
 
 import logging
 import MetaTrader5 as mt5
+from src.indicator.macd import calculate
+
 
 logger = logging.getLogger(__name__)
 
@@ -89,5 +91,13 @@ class Chart:
             self.prices = [new_price]
         else:
             self.prices = [new_price] + self.prices[:-1]
+            
+    def get_close_prices(self):
+        return [candle["close"] for candle in reversed(self.prices)]
+
+    def get_macd(self, fast=5, slow=10, signal=9):
+        closes = self.get_close_prices()
+        return calculate_macd(closes, fast, slow, signal)
+
 
 __all__ = ("Chart",)
