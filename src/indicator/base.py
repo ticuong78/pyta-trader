@@ -1,4 +1,4 @@
-from typing import List, number
+from typing import List
 
 from abc import ABC, abstractmethod
 
@@ -14,11 +14,11 @@ class Indicator(ABC):
         self.prices = prices
     
     @abstractmethod
-    def calculate() -> List[number]:
+    def calculate() -> List[float]:
         """
         Calculate the indicator, each indicator has its own calculation method and formulas
         
-        :return List[number]: List of calculated values
+        :return List[float]: List of calculated values
         """
         pass
     
