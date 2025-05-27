@@ -9,6 +9,7 @@ import MetaTrader5 as mt5
 
 from src.config import get_config 
 from src.infras import init_mt5, shut_mt5
+from src.indicator.macd import MACDIndicator
 from src.chart import Chart
 
 logger = logging.getLogger(__name__)
@@ -30,14 +31,9 @@ try:
         config.mt5_server,
     )
 
-    for symbol in symbols.keys():
-        chart = Chart(symbol, mt5.TIMEFRAME_M12)
-        assert chart.init_chart()
-        symbols[symbol] = chart.get_chart()
-        print(symbols[symbol])
-
-    # lasttick = mt5.symbol_info_tick("BTCUSD_m")
-    # print(lasttick)
+    chart = Chart("BTCUSD_m", mt5.TIMEFRAME_M12)
+    macd = MACDIndicator()
+    chart.attach_indicator(macd)
 
 except Exception as e:
     logging.exception(e)

@@ -2,7 +2,6 @@ from typing import List
 from src.chart import Chart
 from src.indicator.macd import MACDIndicator
 
-
 def classify_histogram_numeric(value: float, threshold: float = 0.01) -> int:
     """
     Phân loại giá trị MACD Histogram thành mã số tín hiệu:
@@ -70,7 +69,6 @@ def detect_macd_signal_from_chart(chart: Chart) -> int:
     _, _, histogram = macd.calculate(closes)
 
     return macd_m12_signal_numeric(histogram)
-
 
 if __name__ == "__main__":
     import MetaTrader5 as mt5

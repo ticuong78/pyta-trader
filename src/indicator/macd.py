@@ -1,3 +1,5 @@
+# pyright: reportIncompatibleMethodOverride=false
+
 from typing import List
 from .base import Indicator
 from ..calculations import calculate_ema  # Your own EMA implementation
