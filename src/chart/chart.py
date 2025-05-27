@@ -2,6 +2,10 @@
 
 import logging
 import MetaTrader5 as mt5
+<<<<<<< HEAD
+=======
+# from src.indicator.macd import calculate
+>>>>>>> master
 
 from typing import List
 
