@@ -1,4 +1,4 @@
-from typing import Tuple, List, number
+from typing import Tuple, List
 
 from .base import Indicator
 from ..calculations import calculate_ema
@@ -10,7 +10,7 @@ class MACDIndicator(Indicator):
         self.signal = []
         self.histogram = []
 
-    def calculate(self, prices, fast=5, slow=10, signal=9) -> Tuple[List[number], List[number], List[number]]:
+    def calculate(self, prices, fast=5, slow=10, signal=9) -> Tuple[List[float], List[float], List[float]]:
         """
         Calculate MACD based on passed arguments
 
@@ -21,7 +21,7 @@ class MACDIndicator(Indicator):
             signal (int, optional): signalling period. Defaults to 9.
 
         Returns:
-            Tuple[List[number], List[number], List[number]]: macd, signal, histogram
+            Tuple[List[float], List[float], List[float]]: macd, signal, histogram
         """
         fast_ema = self.calculate_ema(prices, fast)
         slow_ema = self.calculate_ema(prices, slow)
