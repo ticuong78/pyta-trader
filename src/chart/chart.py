@@ -2,14 +2,11 @@
 
 import logging
 import MetaTrader5 as mt5
-<<<<<<< HEAD
-=======
 # from src.indicator.macd import calculate
->>>>>>> master
 
 from typing import List
 
-from src.indicator.base import Indicator, number
+from src.indicator.base import Indicator
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +18,7 @@ class Chart:
         :param symbol: Trading symbol (e.g. 'EURUSD')
         :param time_frame: Time frame constant from MetaTrader5 (e.g. mt5.TIMEFRAME_M1)
         """
-        self.prices: List[number] = []
+        self.prices: List[float] = []
         self.indicators: List[Indicator] = []
         self.last_tick_time = 0
         self.symbol = symbol
@@ -82,7 +79,7 @@ class Chart:
                 if latest["time"] != self.prices[0]["time"]:
                     self.shift_down_and_append(latest)
                 else:
-                    self.prices[0] = latest
+                    self.prices[0] = latest # type: ignore
 
             return True
 
@@ -105,5 +102,12 @@ class Chart:
             return
 
         self.indicators.append(indicator)
+        
+    def detach_indicator(self, indicator: Indicator):
+        if indicator not in self.indicators:
+            logger.warning("Indicator not attached. Please check!")
+            return
+
+        self.indicators.remove(indicator)
     
 __all__ = ("Chart",)
