@@ -22,6 +22,9 @@ class Indicator(ABC):
         """
         pass
     
+    def __eq__(self, other):
+        return isinstance(other, Indicator)
+    
 __all__ = (
     "Indicator",
 )

@@ -2,8 +2,10 @@
 
 import logging
 import MetaTrader5 as mt5
-from src.indicator.macd import calculate
 
+from typing import List
+
+from src.indicator.base import Indicator, number
 
 logger = logging.getLogger(__name__)
 
@@ -15,8 +17,8 @@ class Chart:
         :param symbol: Trading symbol (e.g. 'EURUSD')
         :param time_frame: Time frame constant from MetaTrader5 (e.g. mt5.TIMEFRAME_M1)
         """
-        self.prices = []
-        self.indicators = []
+        self.prices: List[number] = []
+        self.indicators: List[Indicator] = []
         self.last_tick_time = 0
         self.symbol = symbol
         self.time_frame = time_frame
@@ -93,7 +95,11 @@ class Chart:
         else:
             self.prices = [new_price] + self.prices[:-1]
     
-    def attach_indicator(self, indicator):
-        indicator.calculate(self.prices)
+    def attach_indicator(self, indicator: Indicator):
+        if indicator in self.indicators or Indicator is None:
+            logger.warning("Indicator already attached or None. Please check!")
+            return
+
+        self.indicators.append(indicator)
     
 __all__ = ("Chart",)
