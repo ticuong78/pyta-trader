@@ -1,3 +1,8 @@
+from typing import List
+from src.chart import Chart
+from src.indicator.macd import MACDIndicator
+
+
 def classify_histogram_numeric(value: float, threshold: float = 0.01) -> int:
     """
     Phân loại giá trị MACD Histogram thành mã số tín hiệu:
@@ -47,3 +52,43 @@ def macd_m75_or_h4_filter_numeric(histogram_latest: float, is_buy: bool, thresho
     if not is_buy and color == 2:
         return True
     return False
+
+def detect_macd_signal_from_chart(chart: Chart) -> int:
+    """
+    Sinh tín hiệu BUY/SELL từ dữ liệu trong Chart
+
+    Returns:
+        int: 1 = BUY, 0 = SELL, -1 = NO SIGNAL
+    """
+    prices = chart.get_chart()
+    closes = [p["close"] for p in prices]
+
+    if len(closes) < 10:
+        return -1
+
+    macd = MACDIndicator(closes)
+    _, _, histogram = macd.calculate(closes)
+
+    return macd_m12_signal_numeric(histogram)
+
+
+if __name__ == "__main__":
+    import MetaTrader5 as mt5
+    from src.chart import Chart
+
+    SYMBOL = "BTCUSD_m"
+    TIMEFRAME = mt5.TIMEFRAME_M15
+
+    chart = Chart(SYMBOL, TIMEFRAME)
+
+    if not chart.init_chart():
+        print("❌ Không thể khởi tạo biểu đồ")
+    else:
+        signal = detect_macd_signal_from_chart(chart)
+
+        if signal == 1:
+            print("📈 MACD BUY Signal")
+        elif signal == 0:
+            print("📉 MACD SELL Signal")
+        else:
+            print("❓ No signal (MACD không đủ điều kiện)")
