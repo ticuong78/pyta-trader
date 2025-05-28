@@ -1,3 +1,11 @@
+def calculate_sma(prices, period):
+    sma = 0
+
+    for i in range(period):
+        sma += prices[i]
+
+    return sma / period
+
 def calculate_ema(prices, period):
     ema = []
     if len(prices) < period:
@@ -13,5 +21,6 @@ def calculate_ema(prices, period):
     return ema  # pad to match TradingView's indexing
 
 __all__ = (
+    "calculate_sma",
     "calculate_ema",
 )
