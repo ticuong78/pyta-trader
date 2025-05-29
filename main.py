@@ -13,7 +13,6 @@ import matplotlib.dates as mdates
 from src.pyta_trader.chart import Chart
 from src.pyta_trader.indicator.macd import MACDIndicator
 
-# ───── Configuration ─────
 SYMBOL = "BTCUSD_m"
 TIMEFRAME = 12
 NUM_CANDLES = 50
