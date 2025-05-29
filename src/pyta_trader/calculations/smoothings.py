@@ -1,24 +1,26 @@
 def calculate_sma(prices, period):
     sma = 0
-
     for i in range(period):
         sma += prices[i]
 
     return sma / period
 
+
 def calculate_ema(prices, period):
     ema = []
+
+    sma = calculate_sma(prices, period)
+    ema.append(sma)
+    
     if len(prices) < period:
         return []
+    
+    alpha = 2 / period + 1
 
-    # Start with SMA
-    sma = sum(prices[:period]) / period
-    ema.append(sma)
-
-    alpha = 2 / (period + 1)
-    for price in prices[period:]:
-        ema.append(alpha * price + (1 - alpha) * ema[-1])
-    return ema  # pad to match TradingView's indexing
+    for i in range(period, len(prices)):
+        ema.append(alpha * prices[i] + (1 - alpha) * ema[i - 1] )
+        
+    return ema
 
 __all__ = (
     "calculate_sma",
