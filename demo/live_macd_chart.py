@@ -1,85 +1,91 @@
 # pyright: reportArgumentType=false
 
 """
-A live candlestick + MACD chart using mplfinance and your Chart class
+Live MACD Histogram Chart only (no Candlestick)
 """
 
-import sys
-import os
+import asyncio
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
-import MetaTrader5 as mt5
 import pandas as pd
 from datetime import datetime
-from mplfinance.original_flavor import candlestick_ohlc
 import matplotlib.dates as mdates
 
-# Ensure `src` folder is in path
-sys.path.append(os.path.abspath("src"))
-
-# ───── Custom modules ─────
 from src.pyta_trader.chart import Chart
 from src.pyta_trader.indicator.macd import MACDIndicator
 
 # ───── Configuration ─────
 SYMBOL = "BTCUSD_m"
-TIMEFRAME = 12  # mt5.TIMEFRAME_M12
+TIMEFRAME = 12
 NUM_CANDLES = 50
 
-# ───── Chart + Indicator Setup ─────
-chart = Chart(symbol=SYMBOL, time_frame=TIMEFRAME)
-if not chart.init_chart():
-    raise RuntimeError("Failed to initialize chart")
+async def main():
+    chart = Chart(symbol=SYMBOL, time_frame=TIMEFRAME)
+    macd = MACDIndicator()
+    chart.attach_indicator(macd)
 
-macd = MACDIndicator()
-chart.attach_indicator(macd)
+    if not await chart.init_chart():
+        raise RuntimeError("❌ Failed to initialize chart")
 
-# ───── Plotting Setup ─────
-fig, (ax_price, ax_macd) = plt.subplots(2, 1, figsize=(12, 8), sharex=True, gridspec_kw={'height_ratios': [2, 1]})
+    print("✅ Chart and MACD initialized. Starting histogram plot...")
 
-def animate(frame):
-    updated = chart.check_and_update_chart()
-    prices = chart.get_chart()[:NUM_CANDLES]
+    plt.ion()
+    fig, ax_macd = plt.subplots(figsize=(12, 5))
 
-    if not prices:
-        return
+    try:
+        while True:
+            updated = await chart.check_and_update_chart()
+            if not updated:
+                await asyncio.sleep(1)
+                continue
 
-    df = pd.DataFrame(prices)
-    df["time"] = pd.to_datetime(df["time"], unit="s")
-    df["mpl_time"] = df["time"].map(mdates.date2num)
+            prices = chart.get_chart()[-NUM_CANDLES:]
+            if len(prices) < 10 or len(macd.histogram) < 10:
+                print(len(prices), len(macd.histogram))
+                print("⌛ Waiting for more price/MACD data...")
+                await asyncio.sleep(1)
+                continue
 
-    ohlc = df[["mpl_time", "open", "high", "low", "close"]]
+            # Convert to DataFrame and extract timestamps
+            df = pd.DataFrame(prices)
+            df["time"] = pd.to_datetime(df["time"], unit="s")
+            df["mpl_time"] = df["time"].map(mdates.date2num)
 
-    # ───── Candlestick Chart ─────
-    ax_price.clear()
-    width = (ohlc["mpl_time"].iloc[0] - ohlc["mpl_time"].iloc[1]) * 0.8 if len(ohlc) >= 2 else 0.0005
-    candlestick_ohlc(ax_price, ohlc.values, width=width, colorup='g', colordown='r')
+            x_vals = df["mpl_time"]
+            hist_vals = macd.histogram
 
-    ax_price.set_title(f"{SYMBOL} - Live Candlestick Chart")
-    ax_price.set_ylabel("Price")
-    ax_price.grid(True)
+            # Align lengths
+            n = min(len(hist_vals), len(x_vals))
+            x_vals = x_vals[-n:]
+            hist_vals = hist_vals[-n:]
 
-    # ───── MACD Chart ─────
-    ax_macd.clear()
+            width = (x_vals.iloc[1] - x_vals.iloc[0]) * 0.8 if len(x_vals) >= 2 else 0.0005
 
-    macd_vals = macd.macd[NUM_CANDLES:]
-    signal_vals = macd.signal[NUM_CANDLES:]
-    hist_vals = macd.histogram[NUM_CANDLES:]
-    x_vals = df["mpl_time"].iloc[:len(macd_vals)]
+            # ───── Histogram Plot ─────
+            ax_macd.clear()
+            ax_macd.bar(
+                x_vals,
+                hist_vals,
+                width=width,
+                color=["green" if v >= 0 else "red" for v in hist_vals]
+            )
+            ax_macd.axhline(0, color='gray', linewidth=1, linestyle='--')
+            ax_macd.set_title(f"{SYMBOL} - MACD Histogram")
+            ax_macd.set_ylabel("MACD Histogram")
+            ax_macd.grid(True)
+            ax_macd.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
+            plt.setp(ax_macd.get_xticklabels(), rotation=45)
+            plt.tight_layout()
 
-    if len(macd_vals) > 1:
-        ax_macd.bar(x_vals, hist_vals, width=width * 0.5, color=["green" if v >= 0 else "red" for v in hist_vals])
-        ax_macd.plot(x_vals, macd_vals, label="MACD", color="blue")
-        ax_macd.plot(x_vals, signal_vals, label="Signal", color="orange")
-        ax_macd.legend(loc="upper left")
-        ax_macd.set_ylabel("MACD")
-        ax_macd.grid(True)
+            fig.canvas.draw()
+            fig.canvas.flush_events()
+            plt.pause(0.1)
 
-    # ───── Shared X-Axis Formatting ─────
-    ax_macd.xaxis.set_major_formatter(mdates.DateFormatter('%m-%d %H:%M'))
-    ax_price.set_xlim(ohlc["mpl_time"].min(), ohlc["mpl_time"].max())
-    plt.setp(ax_macd.get_xticklabels(), rotation=45)
-    plt.tight_layout()
+            await asyncio.sleep(10)
 
-ani = animation.FuncAnimation(fig, animate, interval=1000, cache_frame_data=False)
-plt.show()
+    except KeyboardInterrupt:
+        print("🛑 Live histogram chart stopped.")
+        plt.ioff()
+        plt.show()
+
+if __name__ == "__main__":
+    asyncio.run(main())
