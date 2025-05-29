@@ -62,9 +62,9 @@ def animate(frame):
     # ───── MACD Chart ─────
     ax_macd.clear()
 
-    macd_vals = macd.macd[-NUM_CANDLES:]
-    signal_vals = macd.signal[-NUM_CANDLES:]
-    hist_vals = macd.histogram[-NUM_CANDLES:]
+    macd_vals = macd.macd[NUM_CANDLES:]
+    signal_vals = macd.signal[NUM_CANDLES:]
+    hist_vals = macd.histogram[NUM_CANDLES:]
     x_vals = df["mpl_time"].iloc[:len(macd_vals)]
 
     if len(macd_vals) > 1:

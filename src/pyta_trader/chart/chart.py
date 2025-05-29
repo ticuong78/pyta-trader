@@ -2,6 +2,7 @@
 
 import logging
 import MetaTrader5 as mt5
+import asyncio
 from typing import List, Dict
 
 from ..indicator.base import Indicator  # Base class
@@ -28,7 +29,7 @@ class Chart:
             for indicator in self.indicators
         ])
 
-    def init_chart(self) -> bool:
+    async def init_chart(self) -> bool:
         """
         Fetches the initial 100 candles and sets up the chart.
 
@@ -50,13 +51,11 @@ class Chart:
         if tick:
             self.last_tick_time = tick.time
 
-        # 🧠 Notify indicators on initialization
-        for indicator in self.indicators:
-            indicator.update(self.prices)
+        await self.run_indicators()
 
         return True
 
-    def check_and_update_chart(self) -> bool:
+    async def check_and_update_chart(self) -> bool:
         """
         Checks for new ticks and updates the chart. Notifies all attached indicators.
 
@@ -84,8 +83,7 @@ class Chart:
             else:
                 self.prices[-1] = new_price  # Update current candle
 
-            for indicator in self.indicators:
-                indicator.update(self.prices)
+            await self.run_indicators()
 
             return True
 
@@ -98,6 +96,7 @@ class Chart:
         :param new_price: New candle data as a dictionary
         """
         self.prices.append(new_price)
+
         if len(self.prices) > 100:
             self.prices.pop(0)
 
@@ -110,6 +109,7 @@ class Chart:
         if indicator in self.indicators:
             logger.warning("Indicator already attached.")
             return
+
         self.indicators.append(indicator)
         indicator.update(self.prices)  # Initialize with current data
 
@@ -122,6 +122,7 @@ class Chart:
         if indicator not in self.indicators:
             logger.warning("Indicator not found.")
             return
+
         self.indicators.remove(indicator)
 
     def get_chart(self) -> List[Dict]:

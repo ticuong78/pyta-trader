@@ -1,41 +1,50 @@
-# pyright: reportIndexIssue=false, reportArgumentType=false, reportAttributeAccessIssue=false
+import asyncio
+import time
+from src.pyta_trader.chart.chart import Chart
+from src.pyta_trader.indicator.macd import MACDIndicator
 
-"""
-This is an example of how to establish connection to Meta Trader 5
-"""
-
-import logging
 import MetaTrader5 as mt5
 
-from src.pyta_trader.config import get_config 
-from src.pyta_trader.infras import init_mt5, shut_mt5
-from src.pyta_trader.indicator.macd import MACDIndicator
-from src.pyta_trader.chart import Chart
+async def main():
+    # Initialize chart for a specific symbol and timeframe
+    chart = Chart(symbol="BTCUSD_m", time_frame=mt5.TIMEFRAME_M12)  # Adjust symbol and timeframe as needed
 
-logger = logging.getLogger(__name__)
+    # Initialize MACD indicator with default parameters
+    macd_indicator = MACDIndicator()
 
-symbols = {
-    "XAUUSD_m": [], 
-    "BTCUSD_m": []
-}
+    # Attach the MACD indicator to the chart
+    chart.attach_indicator(macd_indicator)
 
-try:
-    config = get_config()
+    # Initialize the chart (fetch initial data)
+    if not await chart.init_chart():
+        print("Failed to initialize chart.")
+        return
 
-    # print(config.mt5_path)
+    print("Starting live MACD monitoring...")
 
-    init_mt5(
-        config.mt5_path,
-        config.mt5_login,
-        config.mt5_passw,
-        config.mt5_server,
-    )
+    try:
+        while True:
+            # Check for new data and update chart
+            updated = chart.check_and_update_chart()
 
-    chart = Chart("BTCUSD_m", mt5.TIMEFRAME_M12)
-    macd = MACDIndicator()
-    chart.attach_indicator(macd)
+            if updated:
+                # Run indicator calculations
+                await chart.run_indicators()
 
-except Exception as e:
-    logging.exception(e)
-finally:
-    shut_mt5()
+                # Retrieve the latest MACD values
+                macd_value = macd_indicator.macd
+                signal_value = macd_indicator.signal
+                histogram_value = macd_indicator.histogram
+
+                # Display the MACD values
+                print(f"MACD: {macd_value:.5f}, Signal: {signal_value:.5f}, Histogram: {histogram_value:.5f}")
+
+            # Wait for a specified interval before the next update
+            await asyncio.sleep(60)  # Adjust the sleep duration as needed
+
+    except KeyboardInterrupt:
+        print("Live MACD monitoring stopped.")
+
+# Run the main function
+if __name__ == "__main__":
+    asyncio.run(main())
