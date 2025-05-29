@@ -18,7 +18,7 @@ def calculate_ema(prices, period):
     alpha = 2 / period + 1
 
     for i in range(period, len(prices)):
-        ema.append(alpha * prices[i] + (1 - alpha) * ema[i - 1] )
+        ema.append(alpha * prices[i] + (1 - alpha) * ema[-1])
         
     return ema
 
