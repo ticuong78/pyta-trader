@@ -5,7 +5,6 @@ import MetaTrader5 as mt5
 from typing import List, Dict
 
 from ..indicator.base import Indicator  # Base class
-# from src.indicator.macd import MACDIndicator  # Optional
 
 logger = logging.getLogger(__name__)
 
@@ -19,9 +18,15 @@ class Chart:
         """
         self.symbol = symbol
         self.time_frame = time_frame
-        self.prices: List[Dict] = []  # Most recent first
+        self.prices: List[Dict] = []  # Oldest first
         self.last_tick_time = 0
         self.indicators: List[Indicator] = []
+
+    async def run_indicators(self):
+        await asyncio.gather(*[
+            indicator.calculate(self.prices)
+            for indicator in self.indicators
+        ])
 
     def init_chart(self) -> bool:
         """
@@ -38,7 +43,8 @@ class Chart:
             logger.warning("Failed to fetch initial candle data")
             return False
 
-        self.prices = [dict(zip(r.dtype.names, r)) for r in reversed(rates)]
+        # Store in chronological order: oldest first, newest last
+        self.prices = [dict(zip(r.dtype.names, r)) for r in rates]
 
         tick = mt5.symbol_info_tick(self.symbol)
         if tick:
@@ -73,10 +79,10 @@ class Chart:
 
             if not self.prices:
                 self.prices = [new_price]
-            elif new_price["time"] != self.prices[0]["time"]:
-                self.shift_down_and_append(new_price)
+            elif new_price["time"] != self.prices[-1]["time"]:
+                self.append_and_trim(new_price)
             else:
-                self.prices[0] = new_price  # Update current candle
+                self.prices[-1] = new_price  # Update current candle
 
             for indicator in self.indicators:
                 indicator.update(self.prices)
@@ -85,13 +91,15 @@ class Chart:
 
         return False
 
-    def shift_down_and_append(self, new_price: Dict):
+    def append_and_trim(self, new_price: Dict):
         """
-        Shifts existing prices down by one, adds new_price at the top.
+        Appends new_price at the end of the list and trims the oldest if needed.
 
         :param new_price: New candle data as a dictionary
         """
-        self.prices = [new_price] + self.prices[:-1]  # Keep fixed window
+        self.prices.append(new_price)
+        if len(self.prices) > 100:
+            self.prices.pop(0)
 
     def attach_indicator(self, indicator: Indicator):
         """
@@ -118,7 +126,7 @@ class Chart:
 
     def get_chart(self) -> List[Dict]:
         """
-        Returns current price list (latest first).
+        Returns current price list (oldest first).
 
         :return: List of candle dictionaries
         """
