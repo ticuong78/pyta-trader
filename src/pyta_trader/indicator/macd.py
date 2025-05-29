@@ -1,9 +1,9 @@
-# pyright: reportIncompatibleMethodOverride=false
+# pyright: reportIncompatibleMethodOverride=false, reportAttributeAccessIssue=false
 
 from typing import List
 from .base import Indicator
 from ..calculations.smoothings import calculate_ema
-from ..strategy.price.ha_close import HaCloseStrategy
+from ..strategy.price.close import HaCloseStrategy
 
 class MACDIndicator(Indicator): 
     def __init__(self, prices=None, strategy=HaCloseStrategy(), fast=5, slow=10, signal=9):
@@ -11,7 +11,7 @@ class MACDIndicator(Indicator):
         self.slow = slow
         self.fast = fast
         self.signal = signal
-        self._histogram: List[float] = []
+        self.histogram: List[float] = []
         self.strategy = strategy
 
     async def calculate(self) -> bool:
@@ -35,7 +35,7 @@ class MACDIndicator(Indicator):
         signal_line = calculate_ema([m for m in macd_line if m is not None], self.signal)
         signal_line_full = [None] * (len(macd_line) - len(signal_line)) + signal_line
 
-        self._histogram = [
+        self.histogram = [
             m - s if m is not None and s is not None else None
             for m, s in zip(macd_line, signal_line_full)
         ]
@@ -47,10 +47,9 @@ class MACDIndicator(Indicator):
         return await self.calculate()
 
     def latest(self):
-        return next((v for v in reversed(self._histogram) if v is not None), None)
+        return next((v for v in reversed(self.histogram) if v is not None), None)
 
-    @property
-    def histogram(self) -> List[float]:
-        return [v for v in self._histogram if v is not None]
+    def get_indicator(self):
+        return self.histogram.copy()
 
 __all__ = ("MACDIndicator",)

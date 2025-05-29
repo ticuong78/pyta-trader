@@ -38,6 +38,15 @@ class Indicator(ABC):
         """
         pass
 
+    @abstractmethod
+    def get_indicator(self):
+        """
+        Get corresponding values to the indicator.
+        If using MACD, this function must return histogram.
+        If using RSI, this function must return something corresponds to RSI
+        """
+        pass
+
     def __eq__(self, other):
         return isinstance(other, Indicator)
 
