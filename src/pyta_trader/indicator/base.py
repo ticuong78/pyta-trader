@@ -20,7 +20,7 @@ class Indicator(ABC):
         pass
 
     @abstractmethod
-    def calculate(self) -> List[float]:
+    async def calculate(self) -> List[float]:
         """
         Calculate the indicator — each subclass defines its formula.
 
@@ -29,7 +29,7 @@ class Indicator(ABC):
         pass
 
     @abstractmethod
-    def update(self, prices: List[dict]):
+    async def update(self, prices: List[dict]):
         """
         Update prices and re-calculate the indicator values.
         Every subclass must implement this to handle incoming price updates.

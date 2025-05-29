@@ -1,6 +1,7 @@
 # pyright: reportIndexIssue=false, reportAttributeAccessIssue=false
 
 import logging
+import asyncio
 import MetaTrader5 as mt5
 from typing import List, Dict
 
@@ -22,6 +23,9 @@ class Chart:
         self.prices: List[Dict] = []  # Most recent first
         self.last_tick_time = 0
         self.indicators: List[Indicator] = []
+
+    async def run_indicators():
+        asyncio.gather()
 
     def init_chart(self) -> bool:
         """
