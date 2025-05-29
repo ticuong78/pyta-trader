@@ -1,19 +1,17 @@
 import asyncio
 import time
-from src.pyta_trader.chart.chart import Chart
+from src.pyta_trader.chart import Chart
 from src.pyta_trader.indicator.macd import MACDIndicator
-
-import MetaTrader5 as mt5
 
 async def main():
     # Initialize chart for a specific symbol and timeframe
-    chart = Chart(symbol="BTCUSD_m", time_frame=mt5.TIMEFRAME_M12)  # Adjust symbol and timeframe as needed
+    chart = Chart(symbol="BTCUSD_m", time_frame=12)  # Adjust symbol and timeframe as needed
 
     # Initialize MACD indicator with default parameters
     macd_indicator = MACDIndicator()
 
     # Attach the MACD indicator to the chart
-    chart.attach_indicator(macd_indicator)
+    await chart.attach_indicator(macd_indicator)
 
     # Initialize the chart (fetch initial data)
     if not await chart.init_chart():
@@ -25,7 +23,7 @@ async def main():
     try:
         while True:
             # Check for new data and update chart
-            updated = chart.check_and_update_chart()
+            updated = await chart.check_and_update_chart()
 
             if updated:
                 # Run indicator calculations

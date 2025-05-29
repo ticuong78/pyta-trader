@@ -25,7 +25,7 @@ class Chart:
 
     async def run_indicators(self):
         await asyncio.gather(*[
-            indicator.calculate(self.prices)
+            indicator.update(self.prices)
             for indicator in self.indicators
         ])
 
@@ -100,7 +100,7 @@ class Chart:
         if len(self.prices) > 100:
             self.prices.pop(0)
 
-    def attach_indicator(self, indicator: Indicator):
+    async def attach_indicator(self, indicator: Indicator):
         """
         Adds an indicator and updates it immediately.
 
@@ -111,7 +111,7 @@ class Chart:
             return
 
         self.indicators.append(indicator)
-        indicator.update(self.prices)  # Initialize with current data
+        await indicator.update(self.prices)  # Initialize with current data
 
     def detach_indicator(self, indicator: Indicator):
         """

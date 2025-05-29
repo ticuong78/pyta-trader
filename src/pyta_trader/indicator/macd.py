@@ -11,7 +11,7 @@ class MACDIndicator(Indicator):
         self.signal = []
         self.histogram = []
 
-    def calculate(self, fast=5, slow=10, signal=9) -> List[float]:
+    async def calculate(self, fast=5, slow=10, signal=9) -> List[float]:
         if not self.prices or len(self.prices) < slow + signal:
             return []
 
@@ -27,9 +27,9 @@ class MACDIndicator(Indicator):
 
         return self.histogram
 
-    def update(self, prices: List[dict]):
+    async def update(self, prices: List[dict]):
         self.prices = prices
-        self.calculate()
+        await self.calculate()
 
     def latest(self):
         if not self.histogram:
