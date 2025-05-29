@@ -13,8 +13,7 @@ import MetaTrader5 as mt5
 
 from src.pyta_trader.chart import Chart
 from src.pyta_trader.indicator.macd import MACDIndicator
-from src.pyta_trader.strategy.price.close import CloseStrategy
-from src.pyta_trader.strategy.price.ha_close import HaCloseStrategy
+from src.pyta_trader.strategy.price.close import CloseStrategy, HaCloseStrategy
 
 SYMBOL = "BTCUSD_m"
 NUM_CANDLES = 50
