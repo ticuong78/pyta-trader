@@ -9,6 +9,16 @@ from ..indicator.base import Indicator
 
 logger = logging.getLogger(__name__)
 
+
+def shift_append(arr: List[Dict], item: Dict, max_len: int):
+    """
+    Append a new item to the list. If the list exceeds max_len, remove the oldest (index 0).
+    """
+    arr.append(item)
+    if len(arr) > max_len:
+        arr.pop(0)
+
+
 class Chart:
     def __init__(self, symbol: str, time_frame) -> None:
         self.symbol = symbol
@@ -58,9 +68,7 @@ class Chart:
             if not self.prices:
                 self.prices.append(new_price)
             elif self.prices[-1]["time"] != new_price["time"]:
-                self.prices.append(new_price)
-                if len(self.prices) > 100:
-                    self.prices.pop(0)
+                shift_append(self.prices, new_price, 100)
             else:
                 self.prices[-1] = new_price
 
