@@ -85,25 +85,24 @@ pip install pyta-trader
 Dự án được phân chia theo hình thức thư mục sau:
 
 - [project-root](./)
-  - [src](./src/)
-  Thư mục mã nguồn chính, giúp tách biệt mã chương trình khỏi các tệp cấu hình hoặc tài liệu bên ngoài.
-    - [pyta_trader](./src//pyta_trader/)
-      - [calculations](./src/pyta_trader/calculations/)
-      Chứa các phương thức tính toán như SMA, EMA. Smoothings được bỏ vào `smoothings.py`.
-      - [chart](./src/pyta_trader/chart/)
-      Quản lý giá tiền thông qua lớp biểu đồ, thêm vào đó một lớp để quản lý các biểu đồ.
-      - [config](./src/pyta_trader/config/)
-      Quản lý biến môi trường và thông số của dự án.
-      - [excep](./src/pyta_trader/excep/)
-      Chứa các ngoại lệ được mở rộng.
-      - [indicator](./src/pyta_trader/indicator/)
-      Nơi tập trung các chỉ báo.
-      - [infras](./src/pyta_trader/infras/)
-      Cơ sở hạ tầng, giao tiếp với nền tẳng MT5, API và cơ sở dữ liệu. Mở rộng tùy theo nhu cầu trong quá trình phát triển.
-      - [signals](./src/pyta_trader/signals/)
-      Các hàm phân tích thông tin thị trường. Từ indicator có thể đưa ra được các tín hiệu mua/bán.
-      - [strategy](./src/pyta_trader/strategy/)
-      Chứa các chiến lược phân tích giá thị trường như HA Close hoặc Close, v.v. Mở rộng tùy theo nhu cầu sử dụng trong quá trình phát triển.
+  - [pyta_trader](./src//pyta_trader/)
+    Thư mục mã nguồn chính, giúp tách biệt mã chương trình khỏi các tệp cấu hình hoặc tài liệu bên ngoài.
+    - [calculations](./src/pyta_trader/calculations/)
+    Chứa các phương thức tính toán như SMA, EMA. Smoothings được bỏ vào `smoothings.py`.
+    - [chart](./src/pyta_trader/chart/)
+    Quản lý giá tiền thông qua lớp biểu đồ, thêm vào đó một lớp để quản lý các biểu đồ.
+    - [config](./src/pyta_trader/config/)
+    Quản lý biến môi trường và thông số của dự án.
+    - [excep](./src/pyta_trader/excep/)
+    Chứa các ngoại lệ được mở rộng.
+    - [indicator](./src/pyta_trader/indicator/)
+    Nơi tập trung các chỉ báo.
+    - [infras](./src/pyta_trader/infras/)
+    Cơ sở hạ tầng, giao tiếp với nền tẳng MT5, API và cơ sở dữ liệu. Mở rộng tùy theo nhu cầu trong quá trình phát triển.
+    - [signals](./src/pyta_trader/signals/)
+    Các hàm phân tích thông tin thị trường. Từ indicator có thể đưa ra được các tín hiệu mua/bán.
+    - [strategy](./src/pyta_trader/strategy/)
+    Chứa các chiến lược phân tích giá thị trường như HA Close hoặc Close, v.v. Mở rộng tùy theo nhu cầu sử dụng trong quá trình phát triển.
   - [tests](./tests/)
   - [docs](./docs/)
   Nơi lưu trữ tài liệu kỹ thuật cũng như hướng dẫn sử dụng thư viện.
