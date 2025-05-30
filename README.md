@@ -13,19 +13,19 @@ Người phát triển có thể tìm thấy tài liệu về mô đun MetaTrade
 ## Bảng nội dung
 
 - [Giới thiệu](#pyta-trader)
-- [Một số tính năng chính](#một-số-tính-năng-chính)
-- [Cách thức sử dụng](#cách-thức-sử-dụng)
+- [Một số tính năng chính](#1-một-số-tính-năng-chính)
+- [Cách thức sử dụng](#2-cách-thức-sử-dụng)
   - [Điều kiện nền tảng](#điều-kiện-nền-tảng)
   - [Cấu hình repo](#cấu-hình-repo)
     - [Cấu hình repo (cho lập trình viên)](#nếu-bạn-là-nhà-phát-triển-hay-lập-trình-viên)
     - [Cài đặt từ PyPI (cho người dùng thư viện)](#nếu-bạn-là-người-sử-dụng-thư-viện)
-- [Cho lập trình viên](#cho-lập-trình-viên)
+- [Cho lập trình viên](#3-cho-lập-trình-viên)
   - [Cấu hình thư mục](#cấu-hình-thư-mục)
 - [Giấy phép](#giấy-phép)
 
 ---
 
-## Một số tính năng chính
+## 1. Một số tính năng chính
 
 - `pyta-trader` kết nối trực tiếp với nền tảng Meta Trader 5 ngay trên máy tính của họ, giúp người sử dụng có thể thực hiện các thao tác tương tự như Meta Trader 5.
 - `pyta-trader` nhận diện sự thay đổi giá trong thực tế sau đó quản lý và cập nhật thông tin thời gian thực lên biểu đồ.
@@ -33,7 +33,7 @@ Người phát triển có thể tìm thấy tài liệu về mô đun MetaTrade
 
 ---
 
-## Cách thức sử dụng
+## 2. Cách thức sử dụng
 
 ### Điều kiện nền tảng
 
@@ -78,7 +78,7 @@ pip install pyta-trader
 
 ---
 
-## Cho lập trình viên
+## 3. Cho lập trình viên
 
 ### Cấu hình thư mục
 
