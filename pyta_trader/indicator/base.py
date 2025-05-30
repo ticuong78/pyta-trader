@@ -1,19 +1,19 @@
 from typing import List, Dict, Any
 from abc import ABC, abstractmethod
-
+from ..models.price import Price
 
 class Indicator(ABC):
-    def __init__(self, prices: List[dict]):
+    def __init__(self, prices: List[Price]):
         """
         Base class for all technical indicators.
         Derived classes must manage their own computed result fields.
 
         :param prices: List of price dictionaries (usually OHLC or OHLCV)
         """
-        self.prices: List[Dict[str, Any]] = prices or []
+        self.prices: List[Price] = prices or []
 
     @abstractmethod
-    def calculate(self) -> Any:
+    def calculate(self) -> bool:
         """
         Calculate indicator values from `self.prices`.
         Each subclass defines its own output structure.
@@ -23,20 +23,11 @@ class Indicator(ABC):
         pass
 
     @abstractmethod
-    def update(self, prices: List[Dict[str, Any]]):
+    def update(self, price: Price) -> bool:
         """
         Update the internal price data and re-calculate the indicator.
 
         :param prices: New list of price dictionaries
-        """
-        pass
-
-    @abstractmethod
-    def latest(self) -> Any:
-        """
-        Return the most recent indicator value(s).
-
-        :return Any: Depends on indicator type — e.g., last MACD histogram value
         """
         pass
 

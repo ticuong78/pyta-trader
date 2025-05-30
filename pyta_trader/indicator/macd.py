@@ -1,16 +1,19 @@
 # pyright: reportIncompatibleMethodOverride=false, reportAttributeAccessIssue=false
 
+from ..models.price import Price
+
 from typing import List, Optional
 from .base import Indicator
 from ..calculations.smoothings import calculate_ema
 from ..strategy.price.close import HaCloseStrategy
+from ..strategy.price.base import PriceStrategy
 
 
 class MACDIndicator(Indicator):
     def __init__(
         self,
-        prices: Optional[List[dict]] = None,
-        strategy=HaCloseStrategy(),
+        prices: List[Price],
+        strategy: PriceStrategy = HaCloseStrategy(),
         fast: int = 5,
         slow: int = 10,
         signal: int = 9
@@ -27,15 +30,15 @@ class MACDIndicator(Indicator):
         :param slow: Slow EMA period
         :param signal: Signal EMA period
         """
-        super().__init__(prices or [])
+        super().__init__(prices)
         self.fast = fast
         self.slow = slow
         self.signal = signal
         self.strategy = strategy
 
-        self.macd_line: List[Optional[float]] = []
-        self.signal_line: List[Optional[float]] = []
-        self.histogram: List[Optional[float]] = []
+        self.macd_line: List[float] = []
+        self.signal_line: List[float] = []
+        self.histogram: List[float] = []
 
     async def calculate(self) -> bool:
         """
@@ -53,7 +56,7 @@ class MACDIndicator(Indicator):
 
         self.macd_line = [
             f - s if f is not None and s is not None else None
-            for f, s in zip(fast_ema, slow_ema)
+            for f, s in (fast_ema, slow_ema)
         ]
 
         macd_valid = [m for m in self.macd_line if m is not None]
@@ -62,27 +65,20 @@ class MACDIndicator(Indicator):
 
         self.histogram = [
             m - s if m is not None and s is not None else None
-            for m, s in zip(self.macd_line, self.signal_line)
+            for m, s in (self.macd_line, self.signal_line)
         ]
 
         return True
 
-    async def update(self, prices: List[dict]):
+    async def update(self, price: Price) -> bool:
         """
         Update price data and recalculate MACD values.
 
         :param prices: New list of prices
         """
-        self.prices = prices
-        return await self.calculate()
+        
+        self.shift_append(self.prices, price)
 
-    def latest(self) -> Optional[tuple[float, float, float]]:
-        for i in reversed(range(len(self.histogram))):
-            h = self.histogram[i]
-            m = self.macd_line[i]
-            s = self.signal_line[i]
-            if h is not None and m is not None and s is not None:
-                return (m, s, h)
-        return None
+        return await self.calculate()
 
 __all__ = ("MACDIndicator",)
