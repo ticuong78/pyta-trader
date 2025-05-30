@@ -31,9 +31,11 @@ Nếu bạn là nhà phát triển (lập trình viên), đây là các cài đ�
 
 ```bash
 git clone https://github.com/ticuong78/pyta-trader.git
+cd pyta-trader
+cp .sample.env .env
 ```
 
-Sau khi giả tạo một repo, bạn nên tạo một bản sau của `.sample.env` và đổi tên bản đó thành `.env` để bắt đầu sử dụng vì Python sử dụng biến môi trường làm nguồn đầu vào cho các dự án không cần giao tiếp với người dùng (không là lập trình viên).
+Sau khi tạo bản sao một repo, bạn nên tạo một bản sau của `.sample.env` và đổi tên bản đó thành `.env` để bắt đầu sử dụng vì Python sử dụng biến môi trường làm nguồn đầu vào cho các dự án không cần giao tiếp với người dùng (không là lập trình viên).
 
 Một số thông tin bạn cần làm rõ trong tệp `.env` như:
 
