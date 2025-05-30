@@ -30,7 +30,7 @@ Người phát triển có thể tìm thấy tài liệu về mô đun MetaTrade
 Nếu bạn là nhà phát triển (lập trình viên), đây là các cài đặt cho bạn:
 
 ```bash
-git clone [pyta-trader](https://github.com/ticuong78/pyta-trader.git)
+git clone https://github.com/ticuong78/pyta-trader.git
 ```
 
 Sau khi giả tạo một repo, bạn nên tạo một bản sau của `.sample.env` và đổi tên bản đó thành `.env` để bắt đầu sử dụng vì Python sử dụng biến môi trường làm nguồn đầu vào cho các dự án không cần giao tiếp với người dùng (không là lập trình viên).
