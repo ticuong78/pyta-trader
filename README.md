@@ -10,6 +10,21 @@ Người phát triển có thể tìm thấy tài liệu về mô đun MetaTrade
 
 ---
 
+## Bảng nội dung
+
+- [Giới thiệu](#pyta-trader)
+- [Một số tính năng chính](#một-số-tính-năng-chính)
+- [Cách thức sử dụng](#cách-thức-sử-dụng)
+  - [Điều kiện nền tảng](#điều-kiện-nền-tảng)
+  - [Cấu hình repo](#cấu-hình-repo)
+    - [Cấu hình repo (cho lập trình viên)](#nếu-bạn-là-nhà-phát-triển-hay-lập-trình-viên)
+    - [Cài đặt từ PyPI (cho người dùng thư viện)](#nếu-bạn-là-người-sử-dụng-thư-viện)
+- [Cho lập trình viên](#cho-lập-trình-viên)
+  - [Cấu hình thư mục](#cấu-hình-thư-mục)
+- [Giấy phép](#giấy-phép)
+
+---
+
 ## Một số tính năng chính
 
 - `pyta-trader` kết nối trực tiếp với nền tảng Meta Trader 5 ngay trên máy tính của họ, giúp người sử dụng có thể thực hiện các thao tác tương tự như Meta Trader 5.
@@ -27,7 +42,9 @@ Người phát triển có thể tìm thấy tài liệu về mô đun MetaTrade
 
 ### Cấu hình repo
 
-Nếu bạn là nhà phát triển (lập trình viên), đây là các cài đặt cho bạn:
+#### Nếu bạn là nhà phát triển hay lập trình viên
+
+Dưới đây là các cài đặt cho bạn
 
 ```bash
 git clone https://github.com/ticuong78/pyta-trader.git
@@ -49,7 +66,9 @@ MT5_PATH=<đường dẫn đến Meta Trader terminal>
 
 Bạn có thể tìm thấy thông tin về Meta Trader terminal tại đây: [Python Integration](https://www.mql5.com/en/docs/python_metatrader5/mt5initialize_py)
 
-Nếu bạn là người sử dụng thư viện, chúng tôi cung cấp cho bạn một mô đun có thể tìm thấy trên PyPi sau: [pyta-trader](https://pypi.org/project/pyta-trader/)
+#### Nếu bạn là người sử dụng thư viện
+
+Chúng tôi cung cấp cho bạn một mô đun có thể tìm thấy trên PyPi sau: [pyta-trader](https://pypi.org/project/pyta-trader/)
 
 Hoặc
 
