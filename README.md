@@ -1,5 +1,7 @@
 # pyta-trader
 
+<img src="./assets/pypi_screenshot.jpg" style=" width:40vw; height:auto"/>
+
 `pyta-trader` là bộ công cụ giúp người dùng tái hiện lại các thao tác của nền tảng Meta Trader 5 ngay trên Python
 
 Bộ thư viện này sử dụng mô đun MetaTrader5, một mô đun được cung cấp bởi MetaQuotes, một nhà cung cấp nên tảng giao dịch trực tuyến như Meta Trader 5 hay Lite Finance.
