@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import List
 from abc import ABC, abstractmethod
 from ..models.price import Price
 
@@ -13,7 +13,7 @@ class Indicator(ABC):
         self.prices: List[Price] = prices or []
 
     @abstractmethod
-    def calculate(self) -> bool:
+    async def calculate(self) -> bool:
         """
         Calculate indicator values from `self.prices`.
         Each subclass defines its own output structure.
@@ -23,7 +23,7 @@ class Indicator(ABC):
         pass
 
     @abstractmethod
-    def update(self, price: Price) -> bool:
+    async def update(self, prices: List[Price]) -> bool:
         """
         Update the internal price data and re-calculate the indicator.
 
@@ -31,17 +31,9 @@ class Indicator(ABC):
         """
         pass
 
-    def shift_append(self, arr: List[Any], value: Any, max_len: int = 100):
-        """
-        Append a value to a list and keep only the last `max_len` elements.
-
-        :param arr: Target list
-        :param value: Value to append
-        :param max_len: Maximum number of elements allowed
-        """
-        arr.append(value)
-        if len(arr) > max_len:
-            arr.pop(0)
+    @abstractmethod
+    def get(self, attName: str) -> List[float]:
+        pass
 
     def __eq__(self, other):
         """

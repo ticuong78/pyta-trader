@@ -1,4 +1,4 @@
-# pyright: reportIncompatibleMethodOverride=false, reportAttributeAccessIssue=false
+# pyright: reportAttributeAccessIssue=false
 
 from ..models.price import Price
 
@@ -7,7 +7,7 @@ from .base import Indicator
 from ..calculations.smoothings import calculate_ema
 from ..strategy.price.close import HaCloseStrategy
 from ..strategy.price.base import PriceStrategy
-
+from ..excep.indicators.line_not_supported import LineNotSupportedError
 
 class MACDIndicator(Indicator):
     def __init__(
@@ -41,11 +41,6 @@ class MACDIndicator(Indicator):
         self.histogram: List[float] = []
 
     async def calculate(self) -> bool:
-        """
-        Calculate MACD values based on current prices.
-
-        :return bool: True if calculation succeeded
-        """
         if not self.prices or len(self.prices) < self.slow + self.signal:
             return False
 
@@ -70,15 +65,19 @@ class MACDIndicator(Indicator):
 
         return True
 
-    async def update(self, price: Price) -> bool:
-        """
-        Update price data and recalculate MACD values.
-
-        :param prices: New list of prices
-        """
-        
-        self.shift_append(self.prices, price)
+    async def update(self, prices: List[Price]) -> bool:
+        self.prices = prices
 
         return await self.calculate()
+    
+    def get(self, attName: str):
+        if attName.lower() == "macd".lower():
+            return self.macd_line
+        elif attName.lower() == "signal".lower():
+            return self.signal_line
+        elif attName.lower() == "histogram".lower():
+            return self.histogram
+        else:
+            raise LineNotSupportedError(f"Line {attName} is not supported")
 
 __all__ = ("MACDIndicator",)

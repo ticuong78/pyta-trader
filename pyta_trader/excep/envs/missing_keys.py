@@ -1,2 +1,2 @@
-class MissingKeys(Exception):
+class MissingKeysException(Exception):
     pass
