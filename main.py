@@ -3,8 +3,8 @@ import sys
 import asyncio
 import MetaTrader5 as mt5
 
-from pyta_trader.chart import Chart
-from pyta_trader.indicator.macd import MACDIndicator
+from pyta.chart import Chart
+from pyta.indicator.macd import MACDIndicator
 
 symbol = "BTCUSD_m"
 frame = mt5.TIMEFRAME_M12
