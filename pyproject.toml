@@ -1,52 +1,51 @@
 [build-system]
 requires = [
   "setuptools==80.9.0",
-  "wheel"
+  "wheel==0.45.1"
 ]
 build-backend = "setuptools.build_meta"
 
 [project]
-name="pyta_trader"
-version="0.1.2"
-description="A Python-based trading framework integrating with MetaTrader 5 (MT5)."
-authors=[
-    {name: "Lê Phạm Hùng Cường", email: "cuongdayne17@gmail.com},
-    {name: "Nguyễn Phước Anh Dũng", email:"anhdungnguyen955@gmail.com"},
-    {name: "Lê Quốc Anh", email: "Reina.Maccredy@outlook.com"}
+name = "pyta_trader"
+version = "0.1.2.6"
+description = "A Python-based trading framework integrating with MetaTrader 5 (MT5)."
+authors = [
+  { name = "Lê Phạm Hùng Cường",    email = "cuongdayne17@gmail.com" },
+  { name = "Nguyễn Phước Anh Dũng", email = "anhdungnguyen955@gmail.com" },
+  { name = "Lê Quốc Anh",           email = "Reina.Maccredy@outlook.com" }
 ]
-requires-python=">=3.13"
-readme="README.md"
+keywords = ["Meta Trader 5", "trading platform", "integrating"]
+requires-python = ">=3.13"
+readme = "README.md"
 dependencies = [
-    "MetaTrader5==5.0.5050",
-    "numpy==2.2.6",
-    "typing_extensions==4.13.2",
-    "pydantic==2.11.5"
+  "MetaTrader5==5.0.5050",
+  "numpy==2.2.6",
+  "typing_extensions==4.13.2",
+  "pydantic==2.11.5"
 ]
-classifiers=[
-    "License :: Creative Commons Attribution-NonCommercial 4.0 International License",
-    "Programming Language :: Python :: 3.13",
-    "Programming Language :: C++",
-    "Programming Language :: CPython",
-    "Topic :: Utilities",
-    "Topic :: Integrating:: Meta Trader 5 :: LiteFinance"
+classifiers = [
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: C++",
+  "Topic :: Utilities",
 ]
-license-files=["LICENSE"]
+license = { file = "LICENSE" }
 
-[project.option-dependencies]
+[project.optional-dependencies]
 dev = [
   "pytest==8.3.5",
   "twine==6.1.0",
   "readme_renderer==44.0",
   "setuptools==80.9.0",
-  "virtualenv==20.30.0"
+  "virtualenv==20.30.0",
+  "build==1.2.2"
 ]
 
 [project.urls]
-HomePage="https://github.com/ticuong78/pyta-trader"
-Issue="https://github.com/ticuong78/pyta-trader/issues"
+HomePage = "https://github.com/ticuong78/pyta-trader"
+Issue    = "https://github.com/ticuong78/pyta-trader/issues"
 
 [tool.setuptools]
-package-dir = {"" = "pyta"}
+package-dir = { "" = "." }
 
 [tool.setuptools.packages.find]
 where = ["."]
