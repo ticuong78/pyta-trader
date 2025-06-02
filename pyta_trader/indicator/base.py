@@ -13,7 +13,7 @@ class Indicator(ABC):
         self.prices: List[Price] = prices or []
 
     @abstractmethod
-    async def calculate(self) -> bool:
+    async def _calculate(self) -> bool:
         """
         Calculate indicator values from `self.prices`.
         Each subclass defines its own output structure.

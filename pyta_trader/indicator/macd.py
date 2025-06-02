@@ -12,7 +12,7 @@ from ..excep.indicators.line_not_supported import LineNotSupportedError
 class MACDIndicator(Indicator):
     def __init__(
         self,
-        prices: List[Price],
+        prices: List[Price] = [],
         strategy: PriceStrategy = HaCloseStrategy(),
         fast: int = 5,
         slow: int = 10,
@@ -40,7 +40,7 @@ class MACDIndicator(Indicator):
         self.signal_line: List[float] = []
         self.histogram: List[float] = []
 
-    async def calculate(self) -> bool:
+    async def _calculate(self) -> bool:
         if not self.prices or len(self.prices) < self.slow + self.signal:
             return False
 

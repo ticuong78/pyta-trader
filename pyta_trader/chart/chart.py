@@ -6,6 +6,7 @@ import asyncio
 from typing import List, Dict
 
 from ..indicator.base import Indicator
+from ..models.price import Price
 
 logger = logging.getLogger(__name__)
 
@@ -18,12 +19,11 @@ def shift_append(arr: List[Dict], item: Dict, max_len: int):
     if len(arr) > max_len:
         arr.pop(0)
 
-
 class Chart:
     def __init__(self, symbol: str, time_frame) -> None:
         self.symbol = symbol
         self.time_frame = time_frame
-        self.prices: List[Dict] = []
+        self.prices: List[Price] = []
         self.last_tick_time = 0
         self.indicators: List[Indicator] = []
 
@@ -49,7 +49,7 @@ class Chart:
         await self.run_indicators()
         return True
 
-    async def check_and_update_chart(self) -> bool:
+    async def update_chart(self) -> bool:
         tick = mt5.symbol_info_tick(self.symbol)
         if not tick:
             logger.warning("Failed to retrieve tick")
@@ -89,7 +89,7 @@ class Chart:
             return
         self.indicators.remove(indicator)
 
-    def get_chart(self) -> List[Dict]:
+    def get_chart(self) -> List[Price]:
         return self.prices
 
 __all__ = ("Chart",)
