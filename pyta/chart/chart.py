@@ -3,8 +3,9 @@
 import logging
 import MetaTrader5 as mt5
 import asyncio
-from typing import List, Dict, Any
 import numpy as np
+
+from typing import List, Any
 
 from ..indicator.base import Indicator
 from ..models.price import Price, convert_rate_to_price
