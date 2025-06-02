@@ -41,7 +41,7 @@ class MACDIndicator(Indicator):
         self.histogram: List[float] = []
 
     async def _calculate(self) -> bool:
-        if not self.prices or len(self.prices) < self.slow + self.signal:
+        if self.prices is None or len(self.prices) < self.slow + self.signal:
             return False
 
         haclose = [self.strategy.calculate(p) for p in self.prices]
@@ -51,7 +51,7 @@ class MACDIndicator(Indicator):
 
         self.macd_line = [
             f - s if f is not None and s is not None else None
-            for f, s in (fast_ema, slow_ema)
+            for f, s in zip(fast_ema, slow_ema)
         ]
 
         macd_valid = [m for m in self.macd_line if m is not None]
@@ -60,7 +60,7 @@ class MACDIndicator(Indicator):
 
         self.histogram = [
             m - s if m is not None and s is not None else None
-            for m, s in (self.macd_line, self.signal_line)
+            for m, s in zip(self.macd_line, self.signal_line)
         ]
 
         return True
@@ -68,7 +68,7 @@ class MACDIndicator(Indicator):
     async def update(self, prices: List[Price]) -> bool:
         self.prices = prices
 
-        return await self.calculate()
+        return await self._calculate()
     
     def get(self, attName: str):
         if attName.lower() == "macd".lower():

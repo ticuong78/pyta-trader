@@ -3,15 +3,15 @@
 import logging
 import MetaTrader5 as mt5
 import asyncio
-from typing import List, Dict
+from typing import List, Dict, Any
+import numpy as np
 
 from ..indicator.base import Indicator
-from ..models.price import Price
+from ..models.price import Price, convert_rate_to_price
 
 logger = logging.getLogger(__name__)
 
-
-def shift_append(arr: List[Dict], item: Dict, max_len: int):
+def shift_append(arr: List[Any], item: Any, max_len: int):
     """
     Append a new item to the list. If the list exceeds max_len, remove the oldest (index 0).
     """
@@ -35,12 +35,13 @@ class Chart:
             logger.exception("Please first establish connection to MetaTrader 5")
             return False
 
-        rates = mt5.copy_rates_from_pos(self.symbol, self.time_frame, 0, 100)
+        rates: np.ndarray = mt5.copy_rates_from_pos(self.symbol, self.time_frame, 0, 50)
+
         if rates is None or len(rates) == 0:
             logger.warning("Failed to fetch initial candle data")
             return False
-
-        self.prices = [dict(zip(rate.dtype.names, rate)) for rate in rates]
+        
+        self.prices = [convert_rate_to_price(rate) for rate in rates]
 
         tick = mt5.symbol_info_tick(self.symbol)
         if tick:
@@ -63,11 +64,11 @@ class Chart:
                 logger.warning("Failed to fetch latest candle")
                 return False
 
-            new_price = dict(zip(latest[0].dtype.names, latest[0]))
+            new_price = convert_rate_to_price(latest[0])
 
             if not self.prices:
                 self.prices.append(new_price)
-            elif self.prices[-1]["time"] != new_price["time"]:
+            elif self.prices[-1].time != new_price.time:
                 shift_append(self.prices, new_price, 100)
             else:
                 self.prices[-1] = new_price
