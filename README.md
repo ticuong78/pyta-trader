@@ -1,5 +1,7 @@
 # pyta-trader
 
+[![PyPI version](https://img.shields.io/pypi/v/your-package-name.svg)](https://pypi.org/project/pyta-trader/)
+
 <img src="./pyta/assets/pypi_screenshot.jpg" style=" width:40vw; height:auto"/>
 
 `pyta-trader` là bộ công cụ giúp người dùng tái hiện lại các thao tác của nền tảng Meta Trader 5 ngay trên Python
