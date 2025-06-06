@@ -1,6 +1,6 @@
 # pyta-trader
 
-[![PyPI version](https://img.shields.io/pypi/v/your-package-name.svg)](https://pypi.org/project/pyta-trader/)
+[![PyPI version](https://img.shields.io/pypi/v/pyta-trader.svg)](https://pypi.org/project/pyta-trader/)
 
 <img src="./pyta/assets/pypi_screenshot.jpg" style=" width:40vw; height:auto"/>
 
