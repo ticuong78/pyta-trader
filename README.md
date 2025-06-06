@@ -1,12 +1,9 @@
 # pyta-trader
 
-[![PyPI version](https://img.shields.io/pypi/v/pyta-trader.svg)](https://pypi.org/project/pyta-trader/)
-
-## Các chức năng hỗ trợ
-
 ![MACD](https://img.shields.io/badge/function-MACD-blue)
 ![RSI](https://img.shields.io/badge/function-RSI-red)
 ![Smoothing](https://img.shields.io/badge/function-Smoothing-yellow)
+[![PyPI version](https://img.shields.io/pypi/v/pyta-trader.svg)](https://pypi.org/project/pyta-trader/)
 
 ---
 
