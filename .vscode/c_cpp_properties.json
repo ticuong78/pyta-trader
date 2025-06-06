@@ -1,0 +1,23 @@
+{
+    "configurations": [
+        {
+            "name": "MSYS2 GCC",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "C:/msys64/mingw64/include",       
+                "C:/msys64/mingw64/include/python3.12",                          // Python headers
+                "C:/msys64/mingw64/lib/python3.12/site-packages/pybind11/include" // pybind11 (đúng đường trong MSYS)
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "compilerPath": "C:/msys64/mingw64/bin/g++.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}

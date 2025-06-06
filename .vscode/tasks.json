@@ -1,0 +1,23 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build smoothing_cpp (pybind11)",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "setup.py",
+        "build_ext",
+        "--inplace"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/pyta/native/cpp"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    }
+  ]
+}
