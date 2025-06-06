@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "MSYS2 GCC",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/.venv/Lib/site-packages/pybind11/include",
+                "C:/Users/Admin/AppData/Local/Programs/Python/Python313/include"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}

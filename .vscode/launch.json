@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Python: Run & Debug smoothing_cpp",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/pyta/native/cpp/test_smoothing.py",  // Đổi nếu test script bạn nằm chỗ khác
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"  // Đảm bảo module tự build được tìm thấy
+      }
+    }
+  ]
+}

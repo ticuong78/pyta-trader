@@ -5,3 +5,5 @@ readme_renderer==44.0
 setuptools==80.9.0
 virtualenv==20.30.0
 wheel==0.45.1
+pybind11==2.13.6
+scikit-build==0.18.1
