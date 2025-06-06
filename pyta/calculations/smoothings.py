@@ -29,8 +29,8 @@ def calculate_rsi(prices, period):
     losses = [abs(min(delta, 0)) for delta in deltas]
 
     # Trung bình ban đầu (SMA)
-    avg_gain = sum(gains[:period]) / period
-    avg_loss = sum(losses[:period]) / period
+    avg_gain = calculate_sma(gains, period)
+    avg_loss = calculate_sma(losses, period)
 
     rs = avg_gain / avg_loss if avg_loss != 0 else float('inf')
     rsi[period] = 100 - (100 / (1 + rs))
@@ -54,7 +54,6 @@ def calculate_rsi(prices, period):
         rsi[i + 1] = rsi_value  # dịch chỉ số để đúng với prices
 
     return rsi
-
 
 __all__ = (
     "calculate_sma",
