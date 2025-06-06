@@ -1,7 +1,7 @@
 # pyta-trader
 
-![MACD](https://img.shields.io/badge/function-MACD-blue)
-![RSI](https://img.shields.io/badge/function-RSI-red)
+![MACD](https://img.shields.io/badge/class-MACD-blue)
+![RSI](https://img.shields.io/badge/class-RSI-red)
 ![Smoothing](https://img.shields.io/badge/function-Smoothing-yellow)
 [![PyPI version](https://img.shields.io/pypi/v/pyta-trader.svg)](https://pypi.org/project/pyta-trader/)
 
