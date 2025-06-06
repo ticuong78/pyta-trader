@@ -2,6 +2,14 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/pyta-trader.svg)](https://pypi.org/project/pyta-trader/)
 
+## Các chức năng hỗ trợ
+
+![MACD](https://img.shields.io/badge/function-MACD-blue)
+![RSI](https://img.shields.io/badge/function-RSI-red)
+![Smoothing](https://img.shields.io/badge/function-Smoothing-yellow)
+
+---
+
 <img src="./pyta/assets/pypi_screenshot.jpg" style=" width:40vw; height:auto"/>
 
 `pyta-trader` là bộ công cụ giúp người dùng tái hiện lại các thao tác của nền tảng Meta Trader 5 ngay trên Python
