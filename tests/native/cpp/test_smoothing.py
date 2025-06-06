@@ -1,6 +1,6 @@
 import unittest
 import math
-from native.cpp.smoothing_cpp import calculate_ema, calculate_sma
+from pyta.smoothing_cpp import calculate_ema, calculate_sma
 
 class TestSmoothingCpp(unittest.TestCase):
     def test_calculate_sma_normal(self):

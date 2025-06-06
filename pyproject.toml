@@ -1,7 +1,9 @@
 [build-system]
 requires = [
-  "setuptools==80.9.0",
-  "wheel==0.45.1"
+  "setuptools>=80.9.0",
+  "wheel>=0.45.1",
+  "scikit-build>=0.18.1",
+  "pybind11>=2.13.6",
 ]
 build-backend = "setuptools.build_meta"
 
@@ -49,3 +51,4 @@ package-dir = { "" = "." }
 
 [tool.setuptools.packages.find]
 where = ["."]
+include = ["pyta", "pyta.*"]
