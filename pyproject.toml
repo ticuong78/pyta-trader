@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyta_trader"
-version = "0.1.2.6"
+version = "0.1.3"
 description = "A Python-based trading framework integrating with MetaTrader 5 (MT5)."
 authors = [
   { name = "Lê Phạm Hùng Cường",    email = "cuongdayne17@gmail.com" },
