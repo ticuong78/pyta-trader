@@ -1,21 +1,35 @@
+# def calculate_sma(prices, period):
+#     return sum(prices[:period]) / period
+
 def calculate_sma(prices, period):
-    return sum(prices[:period]) / period
+    sma = []
+    total = 0
+    for i in range(period):
+        total += prices[i] / period
+        sma.append(round(total, 3))  # làm tròn cho đẹp
 
-def calculate_ema(prices, period):
+    return sma
+
+
+
+def calculate_ema(prices, period, pad: bool = True):
     if len(prices) < period:
-        return []
+        return []  # Không đủ dữ liệu để tính
 
-    ema = []
+
     sma = calculate_sma(prices, period)
-    ema.append(sma)
+    ema = [sma[- 1]]
 
-    alpha = 2 / (period + 1)  
+    alpha = 2 / (period + 1)
 
     for i in range(period, len(prices)):
-        ema.append(alpha * prices[i] + (1 - alpha) * ema[-1])
-    
-    # Padding to align output length with input length
-    return [None] * (period - 1) + ema
+
+        next_ema = (alpha * prices[i] + (1 - alpha) * ema[-1])
+        ema.append(round(next_ema, 3))
+
+    return [sma[- 1]] * (period - 1) + ema if pad else ema
+
+
 
 def calculate_rsi(prices, period):
     if len(prices) <= period:
