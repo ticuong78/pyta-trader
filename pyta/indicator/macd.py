@@ -8,6 +8,7 @@ from ..strategy.price.base import PriceStrategy
 from ..excep.indicators.line_not_supported import LineNotSupportedError
 from .base import Indicator
 
+
 class MACDIndicator(Indicator):
     def __init__(
         self,
@@ -33,29 +34,23 @@ class MACDIndicator(Indicator):
 
         haclose = [self.strategy.calculate(p) for p in self.prices]
 
-        fast_ema = calculate_ema(haclose, self.fast, pad=False)
-        slow_ema = calculate_ema(haclose, self.slow, pad=False)
+        # Tính EMA nhanh và chậm, đã pad sẵn, không có None
+        fast_ema = calculate_ema(haclose, self.fast, pad=True)
+        slow_ema = calculate_ema(haclose, self.slow, pad=True)
 
-        min_len = min(len(fast_ema), len(slow_ema))
-        fast_ema = fast_ema[-min_len:]
-        slow_ema = slow_ema[-min_len:]
+        # Tính MACD
+        macd_line = [round(f - s, 3) for f, s in zip(fast_ema, slow_ema)]
 
-        macd_raw = [f - s for f, s in zip(fast_ema, slow_ema)]
-        if not macd_raw or len(macd_raw) < self.signal:
-            return False
+        # Tính Signal line (EMA của MACD line)
+        signal_line = calculate_ema(macd_line, self.signal, pad=True)
 
-        signal_raw = calculate_ema(macd_raw, self.signal, pad=False)
-        signal_pad = [None] * (len(macd_raw) - len(signal_raw)) + signal_raw
+        # Tính histogram
+        histogram = [round(m - s, 3) for m, s in zip(macd_line, signal_line)]
 
-        histogram_raw = [
-            m - s if m is not None and s is not None else None
-            for m, s in zip(macd_raw, signal_pad)
-        ]
-
-        total_pad = len(self.prices) - len(macd_raw)
-        self.macd_line = [None] * total_pad + macd_raw
-        self.signal_line = [None] * total_pad + signal_pad
-        self.histogram = [None] * total_pad + histogram_raw
+        # Gán kết quả
+        self.macd_line = macd_line
+        self.signal_line = signal_line
+        self.histogram = histogram
 
         return True
 
@@ -64,20 +59,19 @@ class MACDIndicator(Indicator):
         return await self._calculate()
 
     def get(self, line: str):
-        if line.lower() == "macd":
+        line = line.lower()
+        if line == "macd":
             return self.macd_line
-        elif line.lower() == "signal":
+        elif line == "signal":
             return self.signal_line
-        elif line.lower() == "histogram":
+        elif line == "histogram":
             return self.histogram
         else:
             raise LineNotSupportedError(f"Line {line} is not supported")
 
     def get_latest_valid(self, line: str):
         data = self.get(line)
-        for x in reversed(data):
-            if x is not None:
-                return x
-        return None
+        return data[-1] if data else None
+
 
 __all__ = ("MACDIndicator",)
