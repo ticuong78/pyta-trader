@@ -69,9 +69,4 @@ class MACDIndicator(Indicator):
         else:
             raise LineNotSupportedError(f"Line {line} is not supported")
 
-    def get_latest_valid(self, line: str):
-        data = self.get(line)
-        return data[-1] if data else None
-
-
 __all__ = ("MACDIndicator",)

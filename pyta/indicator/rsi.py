@@ -3,7 +3,6 @@ from ..models.price import Price
 from ..strategy.price.base import PriceStrategy
 from ..strategy.price.close import HaCloseStrategy
 from .base import Indicator
-from ..calculations.smoothings import calculate_rsi
 from pyta.excep.indicators.line_not_supported import LineNotSupportedError
 from ..calculations.smoothings import calculate_sma
 
