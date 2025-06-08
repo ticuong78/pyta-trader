@@ -61,6 +61,23 @@
         "xstring": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "charconv": "cpp",
+        "chrono": "cpp",
+        "complex": "cpp",
+        "filesystem": "cpp",
+        "format": "cpp",
+        "fstream": "cpp",
+        "iomanip": "cpp",
+        "iostream": "cpp",
+        "istream": "cpp",
+        "locale": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "sstream": "cpp",
+        "xlocbuf": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xloctime": "cpp"
     }
 }

@@ -1,6 +1,6 @@
 def calculate_sma(prices, period):
-    if len(prices) < period:
-        return []
+    if len(prices) < period or period <= 0:
+        return None
     return round(sum(prices[:period]) / period, 3)
 
 def calculate_ema(prices, period, pad: bool = True):
