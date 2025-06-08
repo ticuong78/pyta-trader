@@ -6,7 +6,7 @@ from .base import Indicator
 from pyta.excep.indicators.line_not_supported import LineNotSupportedError
 from ..calculations.smoothings import calculate_sma
 
-def calculate_rsi(prices, period):
+def calculate_rsi(prices: List[float], period: int) -> List[float]:
     if len(prices) <= period:
         return [None] * len(prices)
 
