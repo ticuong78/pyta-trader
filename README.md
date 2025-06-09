@@ -82,31 +82,41 @@ pip install pyta-trader
 ```
 
 ---
+### Cài đặt các tools bên ngoài để sử dụng C++ 
 
+Bạn cần cài dặt Microsoft build tools tại đây để sử dụng những thứ liên quan đến nhúng C++: [Microsoft Build Tools](https://visualstudio.microsoft.com/downloads/)
+
+---
 ## 3. Cho lập trình viên
 
 ### Cấu hình thư mục
 
 Dự án được phân chia theo hình thức thư mục sau:
 
-- [project-root](./)
+  - [project-root](./)
   - [pyta_trader](./src//pyta_trader/)
     Thư mục mã nguồn chính, giúp tách biệt mã chương trình khỏi các tệp cấu hình hoặc tài liệu bên ngoài.
-    - [calculations](./src/pyta_trader/calculations/)
+  - [native](./native/)
+    Thư mục chứa mã nguồn nhúng C++.
+    - [cpp](./native/cpp/)
+      Nơi chứa các phương thức tính toán và phương pháp nhúng C++.
+  - [pyta](./pyta/)
+    Thư mục mã nguồn chính, giúp tách biệt mã chương trình khỏi các tệp cấu hình hoặc tài liệu bên ngoài.
+     - [calculations](./src/pyta/calculations/)
     Chứa các phương thức tính toán như SMA, EMA. Smoothings được bỏ vào `smoothings.py`.
-    - [chart](./src/pyta_trader/chart/)
+    - [chart](./src/pyta/chart/)
     Quản lý giá tiền thông qua lớp biểu đồ, thêm vào đó một lớp để quản lý các biểu đồ.
-    - [config](./src/pyta_trader/config/)
+    - [config](./src/pyta/config/)
     Quản lý biến môi trường và thông số của dự án.
-    - [excep](./src/pyta_trader/excep/)
+    - [excep](./src/pyta/excep/)
     Chứa các ngoại lệ được mở rộng.
-    - [indicator](./src/pyta_trader/indicator/)
+    - [indicator](./src/pyta/indicator/)
     Nơi tập trung các chỉ báo.
-    - [infras](./src/pyta_trader/infras/)
+    - [infras](./src/pyta/infras/)
     Cơ sở hạ tầng, giao tiếp với nền tẳng MT5, API và cơ sở dữ liệu. Mở rộng tùy theo nhu cầu trong quá trình phát triển.
-    - [signals](./src/pyta_trader/signals/)
-    Các hàm phân tích thông tin thị trường. Từ indicator có thể đưa ra được các tín hiệu mua/bán.
-    - [strategy](./src/pyta_trader/strategy/)
+    - [models](./pyta/models/)
+    Chứa mô hình về giá.
+    - [strategy](./src/pyta/strategy/)
     Chứa các chiến lược phân tích giá thị trường như HA Close hoặc Close, v.v. Mở rộng tùy theo nhu cầu sử dụng trong quá trình phát triển.
   - [tests](./tests/)
   - [docs](./docs/)
